@@ -28,11 +28,13 @@ As datalink packets (such as magic packets) are send via ISO-layer 2: any source
 ## Requirements:
 *	Webserver running PHP v5.2.6 (earlier versions may work as well).
 *	Make sure firewalls allow incoming magic packets (i.e. forward the public UDP port to the remote host's private broadcast address and do not use conflicting anti-DOS/flooding-rules).
-* Make sure the webserver permits sending packages via sockets. If a "Fatal error: Call to undefined function socket_create()" occurs:
-** Make sure "php_sockets.dll" (Windows) or "php_sockets.so" (Linux) is installed on the webserver.
-** Make sure that the line "extension=php_sockets.dll" in the php.ini file on the Windows webserver is enabled (remove the semi-colon at the beginning of that line). 
-** Restart the webserver, after installing extensions and changing directives.
+* Make sure the webserver permits sending packages via sockets.
 * To encrypt/ decrypt the persistent cookie (used for storing form values of variables) mcrypt should be installed and enabled on the webserver.
+
+If a "Fatal error: Call to undefined function socket_create()" occurs:
+* Make sure "php_sockets.dll" (Windows) or "php_sockets.so" (Linux) is installed on the webserver.
+* Make sure that the line "extension=php_sockets.dll" in the php.ini file on the Windows webserver is enabled (remove the semi-colon at the beginning of that line). 
+* Restart the webserver, after installing extensions and changing directives.
 
 ## Installation:
 Put all uncompressed files in the same directory on a PHP-enabled (Windows or Linux) webserver. If mcrypt is installed and enabled on the webserver: Change the value of $key in Includes/config.php
@@ -51,5 +53,5 @@ Put all uncompressed files in the same directory on a PHP-enabled (Windows or Li
 * Use Cascading Style Sheets (use <div> and <class>).
 * Add button to update data source: file 'oui.txt' on local filesystem of webserver
 * Add option to read/ write profiles (e.g. profile A, profile B, profile C, ...) to a file on the server:
-** "Read settings from: values in the form below/ persistent cookie on the client/ a file on the server"
-** "Write settings: nowwhere/ in persistent cookie on the client/ on a file on the server"
+* - "Read settings from: values in the form below/ persistent cookie on the client/ a file on the server"
+* - "Write settings: nowwhere/ in persistent cookie on the client/ on a file on the server"
