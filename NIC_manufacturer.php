@@ -1,16 +1,15 @@
 <?php
+
+include_once("./Includes/wol_class.php");
+
 // No caching
 header("Cache-Control: no-cache, must-revalidate");
 // Expired date
 header("Expires: Thu, 01 Dec 1994 16:00:00 GMT");
 
 // Custom error handler
-function customError($error_level,$error_message,$error_file,$error_line,$error_context)
-{
-	echo ("<br>error_level: ".$error_level."<br>error_message: <b>".$error_message."</b><br>error_file: ".$error_file."<br>error_line: ".$error_line."<br>error_context: ".$error_context."<br><br>");
-	return;
-}
-set_error_handler("customError"); //set error handler
+set_error_handler(array(new WOL(),'customError_NIC')); //set error handler
+
 session_start();
 // Get $ajaxVariable from URL
 $ajaxVariable=$_GET["ajaxVariable"];

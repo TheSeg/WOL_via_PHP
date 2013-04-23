@@ -1,32 +1,13 @@
 <?php
-// Custom error handler
-function customError($error_level,$error_message,$error_file,$error_line,$error_context)
-{
-	global $handler_error;
-	if (substr_count($error_message, "fsockopen() [") && substr_count($error_message, "]: unable to connect to udp://") && substr_count($error_message, " (Permission denied)"))
-	{
-		// Since this error is already caught, it can be surpressed.
-	}
-	else
-	{
-		if (substr_count($error_message, "It is not safe to rely on the system's timezone settings. "))
-		{
-			$_SESSION['local_timezone_set'] = "Since no timezone was specified, the timezone of the webserver will be used.<br>\n";
-		}
-		else
-		{
-			$_SESSION['handler_error'] = $_SESSION['handler_error']."<br>error_level: ".$error_level."<br>error_message: <b>".$error_message."</b><br>error_file: ".$error_file."<br>error_line: ".$error_line."<br>error_context: ".$error_context."<br>\n";
-		}
-	}
-	return;
-}
+
+require_once("./Includes/wol_class.php");
 
 function WakeOnLan($time_string, $mac_address, $secureon, $addr, $cidr, $port, $store)
 {
 	// Start session (for use with Ajax-script)
 	session_start();
 	//Set error handler
-	set_error_handler("customError");
+	set_error_handler(array(new WOL(),'customError'));
 	// If $time_string is empty
 	if($time_string == "")
 	{
@@ -339,35 +320,14 @@ $store = $_REQUEST['store'];
 
 $Return_WakeOnLan = WakeOnLan($time_string, $mac_address, $secureon, $addr, $cidr, $port, $store); // executes this function
 ?>
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<meta http-equiv="Content-Language" content="en-us"></meta>
-
-<meta http-equiv="Site-Enter" content="blendTrans(Duration=0.3)"></meta>
-<meta http-equiv="Site-Exit" content="blendTrans(Duration=0.3)"></meta>
-<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.1)"></meta>
-<meta http-equiv="Page-Exit" content="blendTrans(Duration=0.1)"></meta>
-
-<meta name="description" content="This application (a couple of PHP-scripts) allows webusers to wake up WOL-enabled remote hosts."></meta>
-<meta name="keywords" content="Wake-On-Lan, magic packet, sleep, hybernate"></meta>
-
-<meta name="Owner" content="'DS508_customer' is the legal owner of this contents, unless stated differently."></meta>
-<meta name="Copyright" content="© Copyright by 'DS508_customer'"></meta>
-
-<meta http-equiv="Content-Style-Type" content="text/css"></meta>
-
-<link rel="icon" href="/media/styleguide/favicon.ico" type="image/vnd.microsoft.icon"></link>
-<link rel="shortcut icon" href="/media/styleguide/favicon.ico" type="image/vnd.microsoft.icon"></link>
-<link rel="favicon" href="/media/styleguide/favicon.ico" type="image/vnd.microsoft.icon"></link>
-
-<meta name="Generator" content="http://notepad-plus.sourceforge.net"></meta>
-<meta http-equiv="Content-Script-Type" content="application/javascript"></meta>
-
-<title>Wake-On-Lan (WOL) - version 1 - output</title>
+<link href="./style/wol_main.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="./lib/jquery.min.js"></script>
+<script type="text/javascript" src="./lib/wol_js.js"></script>
+<title>Wake-On-Lan (WOL) - output</title>
 </head>
 <body>
 <?php
