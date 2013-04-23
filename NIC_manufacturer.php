@@ -33,7 +33,7 @@ else
 		}
 		else
 		{
-			echo ("<b>Unregistered manufacturer</b>".$_SESSION['MAC_array_source']);
+			echo ("<b>Unregistered manufacturer</b> (".$left_nine_chrs.")\n<br />".$_SESSION['MAC_array_source']);
 		}
 	}
 	else

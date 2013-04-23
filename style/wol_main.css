@@ -17,3 +17,7 @@ legend {
   outline:1px solid #000;
   font-weight:bold;
 }
+
+input {
+  font-size:10pt;
+}

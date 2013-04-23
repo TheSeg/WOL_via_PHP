@@ -4,7 +4,7 @@ require_once("./Includes/wol_class.php");
 
 session_start();
 // Check if an array of MAC-addresses is available
-if (!$_SESSION['MAC_array'])
+if (!$_SESSION['MAC_array'] || true )
 {
 	if(file_exists('./ext/oui.txt'))
 	{
@@ -31,15 +31,19 @@ if (!$_SESSION['MAC_array'])
 	{
 		// Build an array of MAC-addresses from $_SESSION['MAC_array']
 		$i=0;
+		//echo "<ul>";
 		foreach ($file_array as $key => $value)
 		{
 			if(substr_count($value,"   (hex)") == 1)
 			{
 				$delimiter = strpos($value,"   (hex)");
-				$_SESSION['MAC_array'][substr($value,0,$delimiter)]=ltrim(substr($value,$delimiter+8,strlen($value)-($delimiter+8)),"\t");
+				$delimiter = str_replace("\t","",$delimiter);
+				//echo "<li>".substr($value,0,$delimiter)." | ".ltrim(substr($value,$delimiter+8,strlen($value)-($delimiter+8)),"\t")."</li>\n";
+				$_SESSION['MAC_array'][substr($value,0,$delimiter)] = ltrim(substr($value,$delimiter+8,strlen($value)-($delimiter+8)),"\t");
 				$i++;
 			}
 		}
+		//echo "</ul>";
 	}
 }
 else
@@ -99,7 +103,7 @@ else {
 // Set default values
 if ($set_cookie == 1) {
 	$time_string = "+3 seconds";
-	$mac_address = "00:00:00:00:00:00";
+	$mac_address = "";
 	$secureon = "";
 	$addr = "";
 	$cidr = "24";
@@ -123,7 +127,7 @@ if ($set_cookie == 1) {
 <h1>WOL via PHP</h1>
 <p>Main functionality of this application: wake up remote devices that support it, such as WOL-enabled clients.</p>
 <!-- FORM -->
-<form method="POST" action="WOL_script.php" name="WOL_form.php">
+<form method="POST" action="./WOL_script.php" name="WOL_form.php">
 <fieldset>
 	<legend>Schedule</legend>
 	<table>
@@ -135,7 +139,7 @@ if ($set_cookie == 1) {
 					Enter a value in <a href="http://www.gnu.org/software/tar/manual/html_node/tar_113.html" target="_blank">this</a> input format.<br></br>
 					Note: To prevent abuse, a minimum delay of 3 seconds will be set.<br></br>
 					Leave the following field empty, if the magic packet needs to be send ASAP, after sending the WOL-request.<br></br>
-					Current date and time of the web server: <b><?php echo date("d-m-y H:i:s e",time()); ?></b> (dd-mm-yyyy hh:mm:ss <a href=\"http://convertit.com/Go/ConvertIt/World_Time/Current_Time.ASP\" target=\"_blank\">timezone</a>).<br></br>
+					Current date and time of the web server: <b><?php echo date("d-m-y H:i:s e",time()); ?></b> (dd-mm-yyyy hh:mm:ss <a href="http://www.timeanddate.com/worldclock/converter.html" target="_blank">timezone</a>).<br></br>
 					</p>
 				</label>
 			</td>
@@ -161,7 +165,7 @@ if ($set_cookie == 1) {
 				</label>
 			</td>
 			<td>
-					<input type="text" required id="WOL_mac_address" name="mac_address" size="17" placeholder="<?php echo $mac_address; ?>" onchange="showValue(this.value)"></input><br></br>
+					<input type="text" required id="WOL_mac_address" name="mac_address" size="17" placeholder="00:00:00:00:00:00" value="<?php echo $mac_address; ?>" /><br></br>
 			</td>
 		</tr>
 	</table>
@@ -180,7 +184,7 @@ if ($set_cookie == 1) {
 				</label>
 			</td>
 			<td>
-					<input type="text" id="WOL_secureon" name="secureon" size="17" value="<?php echo $secureon; ?>"></input><br></br>
+					<input type="text" id="WOL_secureon" name="secureon" size="17" placeholder="00:00:00:00:00:00" value="<?php echo $secureon; ?>"></input><br></br>
 			</td>
 		</tr>
 	</table>
@@ -296,5 +300,10 @@ if ($set_cookie == 1) {
 <!-- BUTTONS -->
 </form>
 <!-- FORM -->
+<?php if ( false ) { // isset($_SESSION['MAC_array'])) {
+  print("<pre>");
+  print_r($_SESSION['MAC_array']);
+  print("</pre>");
+}?>
 </body>
 </html>
